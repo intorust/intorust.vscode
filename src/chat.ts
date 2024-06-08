@@ -135,11 +135,19 @@ class ChatPanel {
         // Use a nonce to only allow specific scripts to be run
         const nonce = getNonce();
 
+        const BOT_IMG = imageUri.toString();
+        const PERSON_IMG = imageUri.toString();
+        const BOT_NAME = "Ferris";
+        const PERSON_NAME = "User";
+
         // Local path to main script run in the webview
         const indexPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'index.html');
         const htmlContentUtf8 = await vscode.workspace.fs.readFile(indexPathOnDisk);
         const htmlContent = new TextDecoder().decode(htmlContentUtf8)
-            .replace("FERRIS.SVG", imageUri.toString());
+            .replace("_BOT_IMG_", BOT_IMG)
+            .replace("_PERSON_IMG_", PERSON_IMG)
+            .replace("_BOT_NAME_", BOT_NAME)
+            .replace("_PERSON_NAME_", PERSON_NAME);
 
         return `<!DOCTYPE html>
 			<html lang="en">
@@ -168,8 +176,11 @@ class ChatPanel {
 
                 <!-- setup some variables for the .js file below -->
                 <script nonce="${nonce}">
-                    const BOT_IMG = "${imageUri.toString()}";
-                </script>
+                    const BOT_IMG = "${BOT_IMG}";
+                    const PERSON_IMG = "${PERSON_IMG}";
+                    const BOT_NAME = "${BOT_NAME}";
+                    const PERSON_NAME = "${PERSON_NAME}";
+                  </script>
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
