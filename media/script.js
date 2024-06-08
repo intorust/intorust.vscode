@@ -20,7 +20,9 @@ msgerForm.addEventListener("submit", event => {
   event.preventDefault();
 
   const msgText = msgerInput.value;
-  if (!msgText) return;
+  if (!msgText) {
+    return;
+  }
 
   appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
   msgerInput.value = "";
