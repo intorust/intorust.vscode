@@ -143,10 +143,15 @@ class ChatPanel {
 				<meta charset="UTF-8">
 
 				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
+					Use a content security policy to only
+                    * allow loading images from our extension directory,
+                    * allow scripts that have a specific nonce
+                    * and allow style from our directory or inline <-- should fix?
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none';
+                    style-src ${webview.cspSource} 'unsafe-inline' ; 
+                    img-src ${webview.cspSource} ;
+                    script-src 'nonce-${nonce}';">
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -156,7 +161,7 @@ class ChatPanel {
 			</head>
 			<body>
                 ${htmlContent}
-                
+
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
