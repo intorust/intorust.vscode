@@ -20,6 +20,14 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
+const BOT_MSGS = [
+    "Hi, how are you?",
+    "Ohh... I can't understand what you trying to say. Sorry!",
+    "I like to play games... But I don't know how to play!",
+    "Sorry if my answers are not relevant. :))",
+    "I feel sleepy! :("
+];
+
 /**
  * Manages cat coding webview panels
  */
@@ -87,9 +95,8 @@ class ChatPanel {
         this._panel.webview.onDidReceiveMessage(
             message => {
                 switch (message.command) {
-                    case 'alert':
-                        vscode.window.showErrorMessage(message.text);
-                        return;
+                    case 'userResponse':
+                        return this.respondToUser(message.text);
                 }
             },
             null,
@@ -97,10 +104,14 @@ class ChatPanel {
         );
     }
 
-    public doRefactor() {
-        // Send a message to the webview webview.
-        // You can send any JSON serializable data.
-        this._panel.webview.postMessage({ command: 'refactor' });
+    private respondToUser(text: string) {
+        function random(min: number, max: number) {
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+
+        const r = random(0, BOT_MSGS.length - 1);
+        const msgText = BOT_MSGS[r];
+        this._panel.webview.postMessage({ command: 'botResponse', text: msgText });
     }
 
     public dispose() {
