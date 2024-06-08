@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "intorust.helloWorld",
-        "title": "Hello World"
+        "command": "intorust.explainError",
+        "title": "IntoRust: Explain Error"
       }
     ]
   },
