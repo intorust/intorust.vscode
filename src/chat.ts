@@ -161,7 +161,7 @@ class ChatPanel {
 
 				<link href="${styleUri}" rel="stylesheet">
 
-				<title>Cat Coding</title>
+				<title>Into Rust</title>
 			</head>
 			<body>
                 ${htmlContent}
