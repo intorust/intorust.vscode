@@ -155,9 +155,9 @@ class ChatPanel {
 				<title>Cat Coding</title>
 			</head>
 			<body>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
-
                 ${htmlContent}
+                
+				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
     }
