@@ -10,7 +10,6 @@ const BOT_MSGS = [
   "I feel sleepy! :("
 ];
 
-const BOT_IMG = "./ferris.svg";
 const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
 const BOT_NAME = "BOT";
 const PERSON_NAME = "Sajad";

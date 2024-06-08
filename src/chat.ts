@@ -123,19 +123,23 @@ class ChatPanel {
     }
 
     private async _getHtmlForWebview(webview: vscode.Webview) {
-        // Local path to main script run in the webview
-        const indexPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'index.html');
-        const htmlContentUtf8 = await vscode.workspace.fs.readFile(indexPathOnDisk);
-        const htmlContent = new TextDecoder().decode(htmlContentUtf8);
-
         const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'script.js');
         const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
         const stylePathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'style.css');
         const styleUri = webview.asWebviewUri(stylePathOnDisk);
 
+        const imagePathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'ferris.svg');
+        const imageUri = webview.asWebviewUri(imagePathOnDisk);
+
         // Use a nonce to only allow specific scripts to be run
         const nonce = getNonce();
+
+        // Local path to main script run in the webview
+        const indexPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'index.html');
+        const htmlContentUtf8 = await vscode.workspace.fs.readFile(indexPathOnDisk);
+        const htmlContent = new TextDecoder().decode(htmlContentUtf8)
+            .replace("FERRIS.SVG", imageUri.toString());
 
         return `<!DOCTYPE html>
 			<html lang="en">
@@ -161,6 +165,11 @@ class ChatPanel {
 			</head>
 			<body>
                 ${htmlContent}
+
+                <!-- setup some variables for the .js file below -->
+                <script nonce="${nonce}">
+                    const BOT_IMG = "${imageUri.toString()}";
+                </script>
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
