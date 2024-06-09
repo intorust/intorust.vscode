@@ -15,9 +15,8 @@
     "AI",
     "Chat"
   ],
-  "activationEvents": [],
-  "enabledApiProposals": [
-    "chatVariableResolver"
+  "activationEvents": [
+    "onLanguage:rust"
   ],
   "main": "./dist/extension.js",
   "contributes": {
