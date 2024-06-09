@@ -2,6 +2,7 @@
   "name": "intorust",
   "displayName": "IntoRust",
   "description": "Learn Rust with the power of GenAI",
+  "publisher": "nikomatsakis",
   "repository": {
     "type": "git",
     "url": "https://github.com/nikomatsakis/intorust.vscode"
@@ -22,10 +23,26 @@
   "contributes": {
     "commands": [
       {
-        "command": "intorust.explainError",
-        "title": "IntoRust: Explain Error"
+        "command": "intorust.enableCodeLens",
+        "title": "IntoRust: Enable CodeLens"
+      },
+      {
+        "command": "intorust.disableCodeLens",
+        "title": "IntoRust: Disable Codelens"
+      },
+      {
+        "command": "intorust.explainErrors",
+        "title": "IntoRust: Explain errors on this line"
       }
-    ]
+    ],
+    "configuration": {
+      "properties": {
+        "intorust.enableCodeLens": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

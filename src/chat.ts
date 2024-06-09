@@ -2,12 +2,6 @@ import * as vscode from 'vscode';
 import * as advisor from './advisor';
 
 export function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(
-        vscode.commands.registerCommand('intorust.explainError', () => {
-            ChatPanel.createOrShow(context.extensionUri);
-        })
-    );
-
     if (vscode.window.registerWebviewPanelSerializer) {
         // Make sure we register a serializer in activation event
         vscode.window.registerWebviewPanelSerializer(ChatPanel.viewType, {
@@ -19,6 +13,10 @@ export function activate(context: vscode.ExtensionContext) {
             }
         });
     }
+}
+
+export function explainErrorsCommand(context: vscode.ExtensionContext, args: any) {
+    ChatPanel.createOrShow(context.extensionUri);
 }
 
 const BOT_MSGS = [
