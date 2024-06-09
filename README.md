@@ -1,71 +1,21 @@
-# intorust README
+# intorust.vscode
 
-This is the README for your extension "intorust". After writing up a brief description, we recommend including the following sections.
+This is a super duper experimental VSCode extension that aims to help folks learn Rust more easily.
 
-## Features
+## What it does
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+> **Help wanted.** Note that most of the functionality here is either broken or unimplemented. I've embedded links to issues through the README where you can help to fill that functionality in, if you so choose. =)
 
-For example if there is an image subfolder under your extension project workspace:
+When you open a Rust project with compilation errors, you get a "Explain these errors" codelen hovering above each error ([FIXME#6](https://github.com/nikomatsakis/intorust.vscode/issues/6)):
 
-\!\[feature X\]\(images/feature-x.png\)
+XXX insert image
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Clicking on that takes you to a chat window where [Ferris](https://rustacean.net/) themselves is there to help ([FIXME#11](https://github.com/nikomatsakis/intorust.vscode/issues/11)). Ferris examines the error message and relevant snippets from the surrounding code ([FIXME#7](https://github.com/nikomatsakis/intorust.vscode/issues/7)) to offer you a deatiled explanation of what is going on and, hopefully suggestions for how to fix it. You can ask follow-up questions ([FIXME#2](https://github.com/nikomatsakis/intorust.vscode/issues/2)) to dive deeper. If you like the fix Ferris is proposing, you can also ask them to apply it ([FIXME#8](https://github.com/nikomatsakis/intorust.vscode/issues/8)).
 
-## Requirements
+If you don't want to use the codelens, you can disable it and instead invoke the "IntoRust: Explain errors" command from the command palette as desired ([FIXME#5](https://github.com/nikomatsakis/intorust.vscode/issues/5)).
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+IntoRust can also tailor its responses to your knowledge level. For example, you can ask it to provide examples in terms of languages you already know, like Java or Python. Just ask it! It will remember. ([FIXME#14](https://github.com/nikomatsakis/intorust.vscode/issues/14))
 
-## Extension Settings
+## WARNING
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+IntoRust sends snippets and fragments of your code to external LLMs like Copilot to provide responses. These LLMs may retain data from these prompts for their own purposes. If you don't like this, either configure IntoRust to use an LLM you are comfortable with ([FIXME#10](https://github.com/nikomatsakis/intorust.vscode/issues/10)) or configure it to only be enabled on open source projects ([FIXME#13](https://github.com/nikomatsakis/intorust.vscode/issues/13)).
