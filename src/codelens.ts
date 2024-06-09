@@ -25,7 +25,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
         const groupedDiagnostic = groupDiagnosticsByLine(vscode.languages.getDiagnostics(document.uri));
 
         for (const lineNumber in groupedDiagnostic) {
-            const diagnosticsAtLine = groupedDiagnostic[lineNumber];
+            const diagnosticsAtLine: vscode.Diagnostic[] = groupedDiagnostic[lineNumber];
 
             this.codeLenses.push(new vscode.CodeLens(
                 new vscode.Range(Number(lineNumber), 0, Number(lineNumber), 0),

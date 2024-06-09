@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	vscode.commands.registerCommand("intorust.explainErrors", (args: any) => {
-		chat.explainErrorsCommand(context, args);
+		chat.explainErrorsCommand(context, args || []);
 	});
 }
 

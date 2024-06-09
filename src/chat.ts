@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as advisor from './advisor';
+import { Console } from 'console';
 
 export function activate(context: vscode.ExtensionContext) {
     if (vscode.window.registerWebviewPanelSerializer) {
@@ -15,8 +16,9 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
-export function explainErrorsCommand(context: vscode.ExtensionContext, args: any) {
-    ChatPanel.createOrShow(context.extensionUri);
+export function explainErrorsCommand(context: vscode.ExtensionContext, diagnostics: vscode.Diagnostic[]) {
+    console.log(`explainErrorsCommand: ${JSON.stringify(diagnostics)}`);
+    ChatPanel.createOrShow(context.extensionUri).initialPrompt(diagnostics);
 }
 
 const BOT_MSGS = [
@@ -43,7 +45,7 @@ class ChatPanel {
     private readonly _token: vscode.CancellationTokenSource;
     private _disposables: vscode.Disposable[] = [];
 
-    public static createOrShow(extensionUri: vscode.Uri) {
+    public static createOrShow(extensionUri: vscode.Uri): ChatPanel {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
             : undefined;
@@ -51,7 +53,7 @@ class ChatPanel {
         // If we already have a panel, show it.
         if (ChatPanel.currentPanel) {
             ChatPanel.currentPanel._panel.reveal(column);
-            return;
+            return ChatPanel.currentPanel;
         }
 
         // Otherwise, create a new panel.
@@ -63,6 +65,7 @@ class ChatPanel {
         );
 
         ChatPanel.currentPanel = new ChatPanel(panel, extensionUri);
+        return ChatPanel.currentPanel;
     }
 
     public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -98,7 +101,7 @@ class ChatPanel {
             message => {
                 switch (message.command) {
                     case 'userResponse':
-                        return this.respondToUser(message.text);
+                        return this.followUp(message.text);
                 }
             },
             null,
@@ -106,8 +109,13 @@ class ChatPanel {
         );
     }
 
-    private async respondToUser(text: string) {
-        const response = await advisor.getResponse(text, this._token.token);
+    public async initialPrompt(diagnostics: vscode.Diagnostic[]) {
+        const response = await advisor.initialPrompt(diagnostics, this._token.token);
+        this._panel.webview.postMessage({ command: 'botResponse', text: response });
+    }
+
+    private async followUp(userMessage: string) {
+        const response = await advisor.followUp(userMessage, this._token.token);
         this._panel.webview.postMessage({ command: 'botResponse', text: response });
     }
 
