@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as advisor from './advisor';
 
 export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
@@ -41,6 +42,7 @@ class ChatPanel {
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
+    private readonly _token: vscode.CancellationTokenSource;
     private _disposables: vscode.Disposable[] = [];
 
     public static createOrShow(extensionUri: vscode.Uri) {
@@ -72,6 +74,8 @@ class ChatPanel {
     private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
         this._panel = panel;
         this._extensionUri = extensionUri;
+        this._token = new vscode.CancellationTokenSource();
+        this._disposables.push(this._token);
 
         // Set the webview's initial html content
         this._update();
@@ -104,14 +108,9 @@ class ChatPanel {
         );
     }
 
-    private respondToUser(text: string) {
-        function random(min: number, max: number) {
-            return Math.floor(Math.random() * (max - min) + min);
-        }
-
-        const r = random(0, BOT_MSGS.length - 1);
-        const msgText = BOT_MSGS[r];
-        this._panel.webview.postMessage({ command: 'botResponse', text: msgText });
+    private async respondToUser(text: string) {
+        const response = await advisor.getResponse(text, this._token.token);
+        this._panel.webview.postMessage({ command: 'botResponse', text: response });
     }
 
     public dispose() {

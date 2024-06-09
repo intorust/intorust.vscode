@@ -2,14 +2,22 @@
   "name": "intorust",
   "displayName": "IntoRust",
   "description": "Learn Rust with the power of GenAI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikomatsakis/intorust.vscode"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Chat"
   ],
   "activationEvents": [],
+  "enabledApiProposals": [
+    "chatVariableResolver"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -31,7 +39,11 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "postinstall": "npm run setupTiktoken",
+    "setupTiktoken": "run-script-os",
+    "setupTiktoken:linux:darwin": "cp node_modules/@vscode/prompt-tsx/dist/base/tokenizer/cl100k_base.tiktoken dist/",
+    "setupTiktoken:windows": "copy node_modules\\@vscode\\prompt-tsx\\dist\\base\\tokenizer\\cl100k_base.tiktoken dist\\"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
@@ -41,10 +53,12 @@
     "@typescript-eslint/parser": "^7.11.0",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
+    "@vscode/prompt-tsx": "^0.1.10-alpha",
     "esbuild": "^0.21.4",
     "eslint": "^8.57.0",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "run-script-os": "^1.1.6"
   },
   "dependencies": {
     "vsce": "^2.15.0"
