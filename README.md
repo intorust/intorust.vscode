@@ -4,7 +4,7 @@ This is a super duper experimental VSCode extension that aims to help folks lear
 
 ## What it does
 
-> **Help wanted.** Note that most of the functionality here is either broken or unimplemented. I've embedded links to issues through the README where you can help to fill that functionality in, if you so choose. =)
+> **Help wanted.** Note that most of the functionality here is either partially broken or entirely unimplemented. I've embedded links to issues through the README where you can help to fill that functionality in, if you so choose. =)
 
 When you open a Rust project with compilation errors, you get a "Explain these errors" codelen hovering above each error ([FIXME#6](https://github.com/nikomatsakis/intorust.vscode/issues/6)):
 
