@@ -8,7 +8,7 @@ This is a super duper experimental VSCode extension that aims to help folks lear
 
 When you open a Rust project with compilation errors, you get a "Explain these errors" codelen hovering above each error ([FIXME#6](https://github.com/nikomatsakis/intorust.vscode/issues/6)):
 
-XXX insert image
+![image](https://github.com/nikomatsakis/intorust.vscode/assets/155238/8306777c-7bd3-463a-9bc1-b6dee2daf386)
 
 Clicking on that takes you to a chat window where [Ferris](https://rustacean.net/) themselves is there to help ([FIXME#11](https://github.com/nikomatsakis/intorust.vscode/issues/11)). Ferris examines the error message and relevant snippets from the surrounding code ([FIXME#7](https://github.com/nikomatsakis/intorust.vscode/issues/7)) to offer you a detailed explanation of what is going on and, hopefully suggestions for how to fix it. You can ask follow-up questions ([FIXME#2](https://github.com/nikomatsakis/intorust.vscode/issues/2)) to dive deeper. If you like the fix Ferris is proposing, you can also ask them to apply it ([FIXME#8](https://github.com/nikomatsakis/intorust.vscode/issues/8)).
 
