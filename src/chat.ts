@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as advisor from './advisor';
 import * as analyzer from './analyzer';
 import { Console } from 'console';
+import MarkdownIt from 'markdown-it';
 
 export function activate(context: vscode.ExtensionContext) {
     if (vscode.window.registerWebviewPanelSerializer) {
@@ -113,12 +114,16 @@ class ChatPanel {
         diagnostics: vscode.Diagnostic[]
     ) {
         const response = await advisor.initialPrompt(sourceFile, diagnostics, this._token.token);
-        this._panel.webview.postMessage({ command: 'botResponse', text: response });
+        this.postMarkdownResponse(response);
     }
 
     private async followUp(userMessage: string) {
         const response = await advisor.followUp(userMessage, this._token.token);
-        this._panel.webview.postMessage({ command: 'botResponse', text: response });
+        this.postMarkdownResponse(response);
+    }
+
+    private postMarkdownResponse(text: string) {
+        this._panel.webview.postMessage({ command: 'botResponse', text: convertMarkdownToHtml(text) });
     }
 
     public dispose() {
@@ -223,4 +228,9 @@ function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
         // And restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
     };
+}
+
+export function convertMarkdownToHtml(text: string): string {
+    const md = new MarkdownIt();
+    return md.render(text);
 }
