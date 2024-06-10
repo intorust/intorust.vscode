@@ -19,3 +19,18 @@ IntoRust can also tailor its responses to your knowledge level. For example, you
 ## WARNING
 
 IntoRust sends snippets and fragments of your code to external LLMs like Copilot to provide responses. These LLMs may retain data from these prompts for their own purposes. If you don't like this, either configure IntoRust to use an LLM you are comfortable with ([FIXME#10](https://github.com/nikomatsakis/intorust.vscode/issues/10)) or configure it to only be enabled on open source projects ([FIXME#13](https://github.com/nikomatsakis/intorust.vscode/issues/13)).
+
+## Frequently asked questions
+
+### LLMs already explain errors, why will this be better?
+
+A very good question and I'm not sure it will be.
+
+But I have a few things I'd like to try:
+
+* Can we bake-in expert knowledge about common Rust mistakes and errors? When I confer with Rust users I see a bunch of common errors and I'm curious how much we can tailor responses to help them understand that.
+* Can we build out a smaller, open-source model that we distribute with Rust and use to provide these explanations? This is really the holy grail for me. I see GenAI as a way to take Rust's error messages and learnability to the next level and I'd like that to be available to all Rust users as part of its standard distribution.
+* Independently from GenAI, can we provide a more interactive experience for Rust error messages? The current "console-based errors" seem to be about as good as they can get.
+
+At worst I have some fun learning about prompt engineering and writing VSCode extensions.
+
