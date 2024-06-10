@@ -62,6 +62,7 @@
     "setupTiktoken:windows": "copy node_modules\\@vscode\\prompt-tsx\\dist\\base\\tokenizer\\cl100k_base.tiktoken dist\\"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.1",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
     "@types/vscode": "^1.90.0",
@@ -77,6 +78,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "markdown-it": "^14.1.0",
     "vsce": "^2.15.0",
     "vscode-languageclient": "^9.0.1"
   }
