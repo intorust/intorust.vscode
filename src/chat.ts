@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as advisor from './advisor';
+import * as analyzer from './analyzer';
 import { Console } from 'console';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -16,18 +17,16 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
-export function explainErrorsCommand(context: vscode.ExtensionContext, diagnostics: vscode.Diagnostic[]) {
+export async function explainErrorsCommand(context: vscode.ExtensionContext, diagnostics: vscode.Diagnostic[]) {
     console.log(`explainErrorsCommand: ${JSON.stringify(diagnostics)}`);
-    ChatPanel.createOrShow(context.extensionUri).initialPrompt(diagnostics);
-}
+    let sourceFile = await analyzer.createSourceFile();
+    if (sourceFile === undefined) {
+        vscode.window.showErrorMessage('rust-analyzer is not installed');
+        return;
+    }
 
-const BOT_MSGS = [
-    "Hi, how are you?",
-    "Ohh... I can't understand what you trying to say. Sorry!",
-    "I like to play games... But I don't know how to play!",
-    "Sorry if my answers are not relevant. :))",
-    "I feel sleepy! :("
-];
+    ChatPanel.createOrShow(context.extensionUri).initialPrompt(sourceFile, diagnostics);
+}
 
 /**
  * Manages cat coding webview panels
@@ -109,8 +108,11 @@ class ChatPanel {
         );
     }
 
-    public async initialPrompt(diagnostics: vscode.Diagnostic[]) {
-        const response = await advisor.initialPrompt(diagnostics, this._token.token);
+    public async initialPrompt(
+        sourceFile: analyzer.SourceFile,
+        diagnostics: vscode.Diagnostic[]
+    ) {
+        const response = await advisor.initialPrompt(sourceFile, diagnostics, this._token.token);
         this._panel.webview.postMessage({ command: 'botResponse', text: response });
     }
 
