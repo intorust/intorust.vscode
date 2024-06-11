@@ -45,6 +45,8 @@ class ChatPanel {
     private readonly _token: vscode.CancellationTokenSource;
     private _disposables: vscode.Disposable[] = [];
 
+    private _context: advisor.AdvisorContext;
+
     public static createOrShow(extensionUri: vscode.Uri): ChatPanel {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
@@ -77,6 +79,7 @@ class ChatPanel {
         this._extensionUri = extensionUri;
         this._token = new vscode.CancellationTokenSource();
         this._disposables.push(this._token);
+        this._context = new advisor.AdvisorContext();
 
         // Set the webview's initial html content
         this._update();
@@ -113,12 +116,12 @@ class ChatPanel {
         sourceFile: analyzer.SourceFile,
         diagnostics: vscode.Diagnostic[]
     ) {
-        const response = await advisor.initialPrompt(sourceFile, diagnostics, this._token.token);
+        const response = await advisor.initialPrompt(sourceFile, diagnostics, this._token.token, this._context);
         this.postMarkdownResponse(response);
     }
 
     private async followUp(userMessage: string) {
-        const response = await advisor.followUp(userMessage, this._token.token);
+        const response = await advisor.followUp(userMessage, this._token.token, this._context);
         this.postMarkdownResponse(response);
     }
 

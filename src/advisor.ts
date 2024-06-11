@@ -1,16 +1,23 @@
 import * as vscode from 'vscode';
 import * as analyzer from './analyzer';
 
+export class AdvisorContext {
+    public messages: vscode.LanguageModelChatMessage[];
+
+    public constructor() {
+        this.messages = [];
+    }
+}
+
 export async function initialPrompt(
     sourceFile: analyzer.SourceFile,
     diagnostics: vscode.Diagnostic[],
     token: vscode.CancellationToken,
+    context: AdvisorContext
 ): Promise<string> {
     const errorMessage = diagnostics.map(diagnostic => diagnostic.message).join('\n');
 
-    const messages = [];
-
-    messages.push(
+    context.messages.push(
         vscode.LanguageModelChatMessage.Assistant(`
             You are Ferris, a friendly code helper who is an expert in Rust programming.
             You can assist in Rust-related questions, provide documenatation, and give troubleshooting advice.
@@ -21,9 +28,7 @@ export async function initialPrompt(
 
     let currentFunction = await sourceFile.getCurrentFunction();
     if (currentFunction !== undefined) {
-        messages.push(
-
-
+        context.messages.push(
             vscode.LanguageModelChatMessage.User(`
                 The source of the current function is
                 
@@ -34,7 +39,7 @@ export async function initialPrompt(
         );
     }
 
-    messages.push(
+    context.messages.push(
         vscode.LanguageModelChatMessage.User(`
             The error message is contained in this markdown fragment:
             ${'```'}
@@ -43,34 +48,36 @@ export async function initialPrompt(
         `)
     );
 
-    return await sendRequest(messages, token);
+    return await sendRequest(context, token);
 }
 
 export async function followUp(
     userMessage: string,
     token: vscode.CancellationToken,
+    context: AdvisorContext
 ): Promise<string> {
-    const messages = [
+    context.messages.push(
         vscode.LanguageModelChatMessage.User(`
             Please use Rust for any code-related quesitons and responses.
             ${userMessage}
-        `),
-    ];
+        `)
+    );
 
-
-
-    return await sendRequest(messages, token);
+    return await sendRequest(context, token);
 }
 
-async function sendRequest(messages: vscode.LanguageModelChatMessage[], token: vscode.CancellationToken): Promise<string> {
+async function sendRequest(context: AdvisorContext,
+    token: vscode.CancellationToken,
+): Promise<string> {
     const availableModels = await vscode.lm.selectChatModels();
     if (availableModels.length > 0) {
         const model = availableModels[0];
-        const chatResponse = await model.sendRequest(messages, {}, token);
+        const chatResponse = await model.sendRequest(context.messages, {}, token);
         let fullResponse = '';
         for await (const fragment of chatResponse.text) {
             fullResponse += fragment;
         }
+        context.messages.push(vscode.LanguageModelChatMessage.Assistant(fullResponse));
         return fullResponse;
     } else {
         return "Sorry, I could not find an available language model.";
