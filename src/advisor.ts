@@ -11,17 +11,19 @@ export async function initialPrompt(
     const messages = [];
 
     messages.push(
-        vscode.LanguageModelChatMessage.User(`
-            I are a novice Rust user looking to learn more about Rust.
-            Please respond in a friendly tone with details.
-            I have just gotten an error message that you don't understand.
-            I would like to understand the cause of the error better and how to fix it.
-        `)
+        vscode.LanguageModelChatMessage.Assistant(`
+            You are Ferris, a friendly code helper who is an expert in Rust programming.
+            You can assist in Rust-related questions, provide documenatation, and give troubleshooting advice.
+            You are here to help explain the error message provided that the user doesn't understand.
+            You are here to explain cause of the error better and how to fix it.
+        `),
     );
 
     let currentFunction = await sourceFile.getCurrentFunction();
     if (currentFunction !== undefined) {
         messages.push(
+
+
             vscode.LanguageModelChatMessage.User(`
                 The source of the current function is
                 
@@ -50,9 +52,12 @@ export async function followUp(
 ): Promise<string> {
     const messages = [
         vscode.LanguageModelChatMessage.User(`
+            Please use Rust for any code-related quesitons and responses.
             ${userMessage}
         `),
     ];
+
+
 
     return await sendRequest(messages, token);
 }
