@@ -79,6 +79,8 @@ class ChatPanel {
         this._extensionUri = extensionUri;
         this._token = new vscode.CancellationTokenSource();
         this._disposables.push(this._token);
+
+        // This probably should live somewhere else eventually
         this._context = new advisor.AdvisorContext();
 
         // Set the webview's initial html content
